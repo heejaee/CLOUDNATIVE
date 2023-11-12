@@ -2,6 +2,7 @@ package com.example.cloudnative.controller;
 
 import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.repository.QuestionRepository;
+import com.example.cloudnative.service.QuestionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @GetMapping("/question/list")
     public String list(Model model) {
-        List<Question> questionList = questionRepository.findAll();
+        List<Question> questionList = questionService.getList();
         model.addAttribute("questionList", questionList);
         return "question_list";
     }
