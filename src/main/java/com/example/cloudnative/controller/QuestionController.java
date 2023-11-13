@@ -1,5 +1,6 @@
 package com.example.cloudnative.controller;
 
+import com.example.cloudnative.controller.form.AnswerForm;
 import com.example.cloudnative.controller.form.QuestionForm;
 import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.service.QuestionService;
@@ -30,7 +31,7 @@ public class QuestionController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Integer id) {
+    public String detail(Model model, @PathVariable Integer id, AnswerForm answerForm) {
         Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
