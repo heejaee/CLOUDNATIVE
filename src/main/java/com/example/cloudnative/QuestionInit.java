@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TestInit {
+public class QuestionInit {
 
+    private final QuestionService questionService;
     private final QuestionRepository questionRepository;
 
     @PostConstruct
@@ -28,5 +29,11 @@ public class TestInit {
 
         questionRepository.save(q1);
         questionRepository.save(q2);
+
+        for (int i = 1; i <= 300; i++) {
+            String subject = String.format("테스트 데이터입니다:[%03d]", i);
+            String content = "내용무";
+            this.questionService.create(subject, content);
+        }
     }
 }
