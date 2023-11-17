@@ -29,6 +29,7 @@ public class UserSecurityService implements UserDetailsService {
         if (_CloudUser.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
+
         CloudUser CloudUser = _CloudUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
         if ("admin".equals(username)) {

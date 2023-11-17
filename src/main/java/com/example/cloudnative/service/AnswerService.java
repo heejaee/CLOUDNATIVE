@@ -1,6 +1,7 @@
 package com.example.cloudnative.service;
 
 import com.example.cloudnative.domain.Answer;
+import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.repository.AnswerRepository;
 import java.time.LocalDateTime;
@@ -13,11 +14,12 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    public void create(Question question, String content) {
+    public void create(Question question, String content, CloudUser author) {
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
+        answer.setAuthor(author);
         answerRepository.save(answer);
     }
 }

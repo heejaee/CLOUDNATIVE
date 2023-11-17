@@ -2,6 +2,7 @@ package com.example.cloudnative.service;
 
 import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.repository.UserRepository;
+import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,14 @@ public class UserService {
 
         userRepository.save(user);
         return user;
+    }
+
+    public CloudUser getUser(String username) {
+        Optional<CloudUser> user = userRepository.findByusername(username);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new DataNotFoundException("siteuser not found");
+        }
     }
 }
