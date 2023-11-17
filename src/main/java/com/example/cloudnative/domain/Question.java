@@ -1,6 +1,5 @@
 package com.example.cloudnative.domain;
 
-import com.example.cloudnative.domain.Answer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
