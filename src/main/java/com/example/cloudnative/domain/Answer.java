@@ -30,4 +30,6 @@ public class Answer {
 
     @ManyToOne
     private CloudUser author;
+
+    private LocalDateTime modifyDate;
 }

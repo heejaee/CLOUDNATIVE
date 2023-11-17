@@ -37,6 +37,17 @@ public class QuestionService {
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         q.setAuthor(user);
-        this.questionRepository.save(q);
+        questionRepository.save(q);
+    }
+
+    public void modify(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+        questionRepository.save(question);
+    }
+
+    public void delete(Question question) {
+       questionRepository.delete(question);
     }
 }
