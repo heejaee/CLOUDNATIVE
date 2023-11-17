@@ -2,6 +2,8 @@ package com.example.cloudnative.service;
 
 import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.domain.Question;
+import com.example.cloudnative.domain.QuestionVoter;
+import com.example.cloudnative.domain.QuestionVoterId;
 import com.example.cloudnative.repository.QuestionRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -49,5 +51,12 @@ public class QuestionService {
 
     public void delete(Question question) {
        questionRepository.delete(question);
+    }
+
+    public void vote(Question question, CloudUser user) {
+        QuestionVoterId questionVoterId = new QuestionVoterId(question.getId(), user.getId());
+        QuestionVoter questionVoter = new QuestionVoter(questionVoterId);
+        question.getVoter().add(questionVoter);
+        questionRepository.save(question);
     }
 }

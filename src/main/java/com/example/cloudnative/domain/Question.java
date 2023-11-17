@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,9 +18,10 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 200)
     private String subject;
@@ -36,4 +38,7 @@ public class Question {
     private CloudUser author;
 
     private LocalDateTime modifyDate;
+
+    @OneToMany
+    private Set<QuestionVoter> voter;
 }
