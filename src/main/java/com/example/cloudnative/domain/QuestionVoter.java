@@ -23,11 +23,4 @@ public class QuestionVoter {
 //    @MapsId
 //    @ManyToOne
 //    private CloudUser user;
-
-    protected QuestionVoter() {
-    }
-
-    public QuestionVoter(QuestionVoterId questionVoterId) {
-        this.questionVoterId = questionVoterId;
-    }
 }

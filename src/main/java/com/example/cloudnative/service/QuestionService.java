@@ -5,6 +5,7 @@ import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.domain.QuestionVoter;
 import com.example.cloudnative.domain.QuestionVoterId;
 import com.example.cloudnative.repository.QuestionRepository;
+import com.example.cloudnative.repository.QuestionVoterRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionVoterRepository questionVoterRepository;
 
     public Page<Question> getList(int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
@@ -55,7 +57,10 @@ public class QuestionService {
 
     public void vote(Question question, CloudUser user) {
         QuestionVoterId questionVoterId = new QuestionVoterId(question.getId(), user.getId());
-        QuestionVoter questionVoter = new QuestionVoter(questionVoterId);
+        QuestionVoter questionVoter = new QuestionVoter();
+        questionVoter.setQuestionVoterId(questionVoterId);
+        questionVoterRepository.save(questionVoter);
+
         question.getVoter().add(questionVoter);
         questionRepository.save(question);
     }
