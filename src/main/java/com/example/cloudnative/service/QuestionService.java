@@ -22,10 +22,12 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoterRepository questionVoterRepository;
 
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(int page, String kw) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
-        return questionRepository.findAll(pageable);
+        return questionRepository.findAllByKeyword(kw, pageable);
     }
+
+
     public Question getQuestion(Integer id) {
         Optional<Question> question = questionRepository.findById(id);
         if (question.isPresent()) {
