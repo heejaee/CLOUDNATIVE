@@ -6,15 +6,22 @@
                 사용자ID 또는 비밀번호를 확인해 주세요.
             </div>
         </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
-            <input type="text" name="username" id="username" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" name="password" id="password" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
+        <div class="mb-3" id="dynamicFormContainer"></div>
     </form>
+    <script>
+        fetch('http://127.0.0.1:8080/login_input.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.querySelector('#dynamicFormContainer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    </script>
 </div>
 </html>
