@@ -45,6 +45,10 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    public void delete(Answer answer) {
+        answerRepository.delete(answer);
+    }
+
     public void vote(Answer answer, CloudUser user) {
         AnswerVoterId answerVoterId = new AnswerVoterId(answer.getId(), user.getId());
         AnswerVoter answerVoter = new AnswerVoter();
