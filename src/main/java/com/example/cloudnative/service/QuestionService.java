@@ -2,8 +2,8 @@ package com.example.cloudnative.service;
 
 import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.domain.Question;
-import com.example.cloudnative.domain.QuestionVoter;
-import com.example.cloudnative.domain.QuestionVoterId;
+import com.example.cloudnative.domain.voter.QuestionVoter;
+import com.example.cloudnative.domain.voter.QuestionVoterId;
 import com.example.cloudnative.repository.QuestionRepository;
 import com.example.cloudnative.repository.QuestionVoterRepository;
 import java.time.LocalDateTime;

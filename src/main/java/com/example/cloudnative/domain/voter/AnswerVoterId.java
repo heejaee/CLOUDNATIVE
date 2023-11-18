@@ -1,4 +1,4 @@
-package com.example.cloudnative.domain;
+package com.example.cloudnative.domain.voter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode
-public class QuestionVoterId implements Serializable {
+public class AnswerVoterId implements Serializable {
 
-    @Column(name = "question_id")
-    private Long questionId;
+    @Column(name = "answer_id")
+    private Long answerId;
 
     @Column(name = "user_id")
     private Long userId;
 
-    public QuestionVoterId(Long questionId, Long userId) {
-        this.questionId = questionId;
+    public AnswerVoterId(Long answerId, Long userId) {
+        this.answerId = answerId;
         this.userId = userId;
     }
 }

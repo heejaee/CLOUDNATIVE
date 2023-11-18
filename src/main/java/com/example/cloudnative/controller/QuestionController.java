@@ -107,8 +107,8 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
     public String questionVote(Principal principal, @PathVariable("id") Integer id) {
-        Question question = this.questionService.getQuestion(id);
-        CloudUser user = this.userService.getUser(principal.getName());
+        Question question = questionService.getQuestion(id);
+        CloudUser user = userService.getUser(principal.getName());
         questionService.vote(question, user);
         return String.format("redirect:/question/detail/%s", id);
     }
