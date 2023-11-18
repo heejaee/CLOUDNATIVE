@@ -21,13 +21,14 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final AnswerVoterRepository answerVoterRepository;
 
-    public void create(Question question, String content, CloudUser author) {
+    public Answer create(Question question, String content, CloudUser author) {
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
         answer.setAuthor(author);
         answerRepository.save(answer);
+        return answer;
     }
 
     public Answer getAnswer(Integer id) {
