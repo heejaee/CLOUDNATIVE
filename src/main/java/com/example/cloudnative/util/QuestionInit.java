@@ -1,4 +1,4 @@
-package com.example.cloudnative;
+package com.example.cloudnative.util;
 
 import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.repository.QuestionRepository;
