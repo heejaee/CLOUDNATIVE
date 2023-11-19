@@ -11,11 +11,11 @@
             </div>
         </div>
     </div>
-    <table class="table">
+    <table class="table table-hover">
         <thead class="table-dark">
         <tr class="text-center">
             <th>번호</th>
-            <th style="width:50%">제목</th>
+            <th style="width:40%">제목</th>
             <th>글쓴이</th>
             <th>작성일시</th>
         </tr>
@@ -23,8 +23,8 @@
         <tbody>
         <tr class="text-center" th:each="question : ${paging}">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - questionStat.index}"></td>
-            <td class="text-start">
-                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+            <td class="text-start" >
+                <a class="link-dark" style="text-decoration-line: none;" th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
                       th:if="${#lists.size(question.answerList) > 0}"
                       th:text="${#lists.size(question.answerList)}">
