@@ -21,9 +21,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="text-center" th:each="question : ${paging}">
+        <tr class="text-center" th:each="question : ${paging}" th:onclick="|location.href='/question/detail/${question.id}'|">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - questionStat.index}"></td>
-            <td class="text-start" th:onclick="|location.href='/question/detail/${question.id}'|">
+            <td class="text-start">
                 <a class="link-dark" style="text-decoration-line: none;" th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
                       th:if="${#lists.size(question.answerList) > 0}"
@@ -37,11 +37,11 @@
     </table>
     <!-- 페이징처리 시작 -->
     <div th:if="${!paging.isEmpty()}">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center pagination-padding-x-sm">
             <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
                 <a class="page-link"
                    href="javascript:void(0)" th:data-page="${paging.number-1}">
-                    <span>이전</span>
+                    <span>&laquo;</span>
                 </a>
             </li>
             <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
@@ -52,7 +52,7 @@
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
                 <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
-                    <span>다음</span>
+                    <span>&raquo;</span>
                 </a>
             </li>
         </ul>
