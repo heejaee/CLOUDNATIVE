@@ -6,29 +6,29 @@
         </div>
     </div>
     <form th:action="@{/user/signup}" th:object="${userForm}" method="post">
+        <div th:fragment="formErrorsFragment" class="alert alert-danger"
+             role="alert"  th:each="err : ${#fields.globalErrors()}">
+            <div th:text="${err}"/>
+        </div>
         <div class="mb-3">
             <label for="username" class="form-label">사용자ID</label>
             <input type="text" th:field="*{username}" class="form-control">
-            <p class="text-danger" th:if="${#fields.hasErrors('username')}"
-               th:errors="*{username}">Incorrect date</p>
+            <p class="text-danger" th:errors="*{username}">Incorrect date</p>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">비밀번호</label>
             <input type="password" th:field="*{password}" class="form-control">
-            <p class="text-danger" th:if="${#fields.hasErrors('password')}"
-               th:errors="*{password}">Incorrect date</p>
+            <p class="text-danger" th:errors="*{password}">Incorrect date</p>
         </div>
         <div class="mb-3">
             <label for="confirmPassword" class="form-label">비밀번호 확인</label>
             <input type="password" th:field="*{confirmPassword}" class="form-control">
-            <p class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
-               th:errors="*{confirmPassword}">Incorrect date</p>
+            <p class="text-danger" th:errors="*{confirmPassword}">Incorrect date</p>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">이메일</label>
             <input type="email" th:field="*{email}" class="form-control">
-            <p class="text-danger" th:if="${#fields.hasErrors('email')}"
-               th:errors="*{email}">Incorrect date</p>
+            <p class="text-danger" th:errors="*{email}">Incorrect date</p>
         </div>
         <button type="submit"  class="btn btn-dark">회원가입</button>
     </form>

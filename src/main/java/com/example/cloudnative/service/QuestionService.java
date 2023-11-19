@@ -66,4 +66,9 @@ public class QuestionService {
         question.getVoter().add(questionVoter);
         questionRepository.save(question);
     }
+
+    public void plusView(Question question) {
+        question.setView(question.getView()+1);
+        questionRepository.save(question);
+    }
 }

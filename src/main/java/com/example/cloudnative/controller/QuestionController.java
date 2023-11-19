@@ -42,6 +42,8 @@ public class QuestionController {
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id, AnswerForm answerForm) {
         Question question = questionService.getQuestion(id);
+        questionService.plusView(question);
+
         model.addAttribute("question", question);
         return "question_detail";
     }
@@ -65,7 +67,7 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
+    public String questionModify(QuestionForm questionForm, @PathVariable Integer id, Principal principal) {
         Question question = questionService.getQuestion(id);
         if(!question.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -107,7 +109,7 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+    public String questionVote(Principal principal, @PathVariable Integer id) {
         Question question = questionService.getQuestion(id);
         CloudUser user = userService.getUser(principal.getName());
         questionService.vote(question, user);
