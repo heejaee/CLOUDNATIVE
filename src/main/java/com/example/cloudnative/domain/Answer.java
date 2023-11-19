@@ -34,8 +34,6 @@ public class Answer {
     @ManyToOne
     private CloudUser author;
 
-    private LocalDateTime modifyDate;
-
     @OneToMany
     private Set<AnswerVoter> voter;
 }

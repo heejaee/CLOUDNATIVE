@@ -49,7 +49,7 @@ public class QuestionService {
     public void modify(Question question, String subject, String content) {
         question.setSubject(subject);
         question.setContent(content);
-        question.setModifyDate(LocalDateTime.now());
+        question.setCreateDate(LocalDateTime.now());
         questionRepository.save(question);
     }
 
