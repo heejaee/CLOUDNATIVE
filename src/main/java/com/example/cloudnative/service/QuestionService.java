@@ -22,7 +22,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoterRepository questionVoterRepository;
 
-    public Page<Question> getList(int page, String kw, String sort) {
+    public Page<Question> findBySort(int page, String kw, String sort) {
         Pageable pageable;
 
         if(sort.equals("recommend")){ // 추천순
@@ -66,16 +66,18 @@ public class QuestionService {
     }
 
     public void vote(Question question, CloudUser user) {
+        // 질문Id와 UserId
         QuestionVoterId questionVoterId = QuestionVoterId.of(question.getId(), user.getId());
+        // 질문Id와 UserId를 복합키로 사용
         QuestionVoter questionVoter = QuestionVoter.from(questionVoterId);
         questionVoterRepository.save(questionVoter);
-
+        // Set에 저장하여 한 질문에는 한사람당 하나의 추천만 가능합니다.
         question.addVoter(questionVoter);
         questionRepository.save(question);
     }
 
     public void plusView(Question question) {
-        question.setView(question.getView()+1);
+        question.plusView(question.getView());
         questionRepository.save(question);
     }
 }

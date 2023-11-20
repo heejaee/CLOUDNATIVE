@@ -12,12 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

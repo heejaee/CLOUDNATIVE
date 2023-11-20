@@ -71,4 +71,8 @@ public class Question {
     public void addVoter(QuestionVoter questionVoter) {
         voter.add(questionVoter);
     }
+
+    public void plusView(int view) {
+        this.view = view+1;
+    }
 }

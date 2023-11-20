@@ -35,7 +35,7 @@ public class QuestionController {
                        @RequestParam(value = "kw", defaultValue = "") String kw,
                        @RequestParam(value = "sort", defaultValue = "recent") String sort) {
         // 페이징과 정렬을 하여 질문들을 보여줍니다.
-        Page<Question> paging = questionService.getList(page, kw, sort);
+        Page<Question> paging = questionService.findBySort(page, kw, sort);
 
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
@@ -46,6 +46,7 @@ public class QuestionController {
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id, AnswerForm answerForm) {
         Question question = questionService.findQuestion(id);
+        // 질문상세페이지에 들어오면 조회수가 증가합니다.
         questionService.plusView(question);
 
         model.addAttribute("question", question);
