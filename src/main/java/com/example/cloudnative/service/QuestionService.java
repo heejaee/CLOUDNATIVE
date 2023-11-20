@@ -22,11 +22,19 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionVoterRepository questionVoterRepository;
 
-    public Page<Question> getList(int page, String kw) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
+    public Page<Question> getList(int page, String kw, String sort) {
+        Pageable pageable;
+        if(sort.equals("recommend")){
+            pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "voter.size"));
+            return questionRepository.findAllByKeyword(kw, pageable);
+        }
+        else if(sort.equals("popular")){
+            pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "view"));
+            return questionRepository.findAllByKeyword(kw, pageable);
+        }
+        pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
         return questionRepository.findAllByKeyword(kw, pageable);
     }
-
 
     public Question getQuestion(Integer id) {
         Optional<Question> question = questionRepository.findById(id);
