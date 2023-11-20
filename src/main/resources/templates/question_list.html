@@ -5,7 +5,8 @@
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-sm btn-dark so" th:classappend="${sort == 'recent' ? 'active' : ''}" th:attr="onclick=|location.href='/question/list?kw=${kw}&page=${paging.number}&sort=recent'|">최신순 </button>
                 <button type="button" class="btn btn-sm btn-dark so" th:classappend="${sort == 'recommend' ? 'active' : ''}" th:attr="onclick=|location.href='/question/list?kw=${kw}&page=${paging.number}&sort=recommend'|">추천순</button>
-                <button type="button" class="btn btn-sm btn-dark so" th:classappend="${sort == 'popular' ? 'active' : ''}" th:attr="onclick=|location.href='/question/list?kw=${kw}&page=${paging.number}&sort=popular'|">인기순</button>
+                <button type="button" class="btn btn-sm btn-dark so" th:classappend="${sort == 'popular' ? 'active' : ''}" th:attr="onclick=|location.href='/question/list?kw=${kw}&page=${paging.number}&sort=popular'|">조회순</button>
+                <button type="button" class="btn btn-sm btn-dark so" th:classappend="${sort == 'answer' ? 'active' : ''}" th:attr="onclick=|location.href='/question/list?kw=${kw}&page=${paging.number}&sort=answer'|">댓글순</button>
             </div>
         </div>
         <div class="col-6">
@@ -19,7 +20,8 @@
         <thead class="table-dark">
         <tr class="text-center">
             <th style="width:10%">번호</th>
-            <th style="width:50%">제목</th>
+            <th style="width:10%">추천</th>
+            <th style="width:40%">제목</th>
             <th style="width:10%">글쓴이</th>
             <th style="width:10%">조회수</th>
             <th style="width:20%">작성일시</th>
@@ -28,6 +30,7 @@
         <tbody>
         <tr class="text-center" th:each="question : ${paging}" th:onclick="|location.href='/question/detail/${question.id}'|">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - questionStat.index}"></td>
+            <td th:text="${question.voter.size}"></td>
             <td class="text-start">
                 <a class="link-dark" style="text-decoration-line: none;" th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
@@ -82,12 +85,10 @@
         });
     });
 
-
     const btn_search = document.getElementById("btn_search");
-
     btn_search.addEventListener('click', function() {
         document.getElementById('kw').value = document.getElementById('search_kw').value;
-        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('page').value = 0;
         document.getElementById('sort').value = "recent";
         document.getElementById('searchForm').submit();
     });

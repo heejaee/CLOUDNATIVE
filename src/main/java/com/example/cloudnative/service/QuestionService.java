@@ -25,12 +25,16 @@ public class QuestionService {
     public Page<Question> getList(int page, String kw, String sort) {
         Pageable pageable;
         if(sort.equals("recommend")){
-            pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "voter.size"));
-            return questionRepository.findAllByKeyword(kw, pageable);
+            pageable = PageRequest.of(page, 10);
+            return questionRepository.findAllByVoter(kw, pageable);
         }
         else if(sort.equals("popular")){
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "view"));
             return questionRepository.findAllByKeyword(kw, pageable);
+        }
+        else if(sort.equals("answer")){
+            pageable = PageRequest.of(page, 10);
+            return questionRepository.findAllByAnswer(kw, pageable);
         }
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
         return questionRepository.findAllByKeyword(kw, pageable);
