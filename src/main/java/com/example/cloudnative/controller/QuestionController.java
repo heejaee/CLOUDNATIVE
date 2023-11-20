@@ -34,7 +34,9 @@ public class QuestionController {
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
                        @RequestParam(value = "kw", defaultValue = "") String kw,
                        @RequestParam(value = "sort", defaultValue = "recent") String sort) {
+        // 페이징과 정렬을 하여 질문들을 보여줍니다.
         Page<Question> paging = questionService.getList(page, kw, sort);
+
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
         model.addAttribute("sort", sort);
@@ -43,7 +45,7 @@ public class QuestionController {
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id, AnswerForm answerForm) {
-        Question question = questionService.getQuestion(id);
+        Question question = questionService.findQuestion(id);
         questionService.plusView(question);
 
         model.addAttribute("question", question);
@@ -62,21 +64,21 @@ public class QuestionController {
         if (bindingResult.hasErrors()) {
             return "question_form";
         }
-        CloudUser siteUser = userService.getUser(principal.getName());
-        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
+        CloudUser user = userService.findUser(principal.getName());
+        questionService.create(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String questionModify(QuestionForm questionForm, @PathVariable Integer id, Principal principal) {
-        Question question = questionService.getQuestion(id);
-        if(!question.getAuthor().getUsername().equals(principal.getName())) {
+        Question question = questionService.findQuestion(id);
+        // 작성자가 아니면 글을 수정할 수 없습니다.
+        if(!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
-        questionForm.setSubject(question.getSubject());
-        questionForm.setContent(question.getContent());
+        questionForm.modify(question.getSubject(), question.getContent());
         return "question_form";
     }
 
@@ -88,8 +90,8 @@ public class QuestionController {
             return "question_form";
         }
 
-        Question question = questionService.getQuestion(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+        Question question = questionService.findQuestion(id);
+        if (!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
@@ -100,8 +102,8 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String questionDelete(Principal principal, @PathVariable Integer id) {
-        Question question = questionService.getQuestion(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+        Question question = questionService.findQuestion(id);
+        if (!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
 
@@ -112,8 +114,9 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
     public String questionVote(Principal principal, @PathVariable Integer id) {
-        Question question = questionService.getQuestion(id);
-        CloudUser user = userService.getUser(principal.getName());
+        Question question = questionService.findQuestion(id);
+        CloudUser user = userService.findUser(principal.getName());
+
         questionService.vote(question, user);
         return String.format("redirect:/question/detail/%s", id);
     }

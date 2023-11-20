@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/answer")
@@ -36,8 +35,8 @@ public class AnswerController {
     public String createAnswer(Model model, @PathVariable Integer id,
                                @Valid AnswerForm answerForm, BindingResult bindingResult,
                                Principal principal) {
-        Question question = questionService.getQuestion(id);
-        CloudUser user = userService.getUser(principal.getName());
+        Question question = questionService.findQuestion(id);
+        CloudUser user = userService.findUser(principal.getName());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("question", question);
@@ -93,7 +92,7 @@ public class AnswerController {
     @GetMapping("/vote/{id}")
     public String answerVote(Principal principal, @PathVariable Integer id) {
         Answer answer = answerService.getAnswer(id);
-        CloudUser user = userService.getUser(principal.getName());
+        CloudUser user = userService.findUser(principal.getName());
         answerService.vote(answer, user);
         return String.format("redirect:/question/detail/%s#answer_%s",
                 answer.getQuestion().getId(), answer.getId());

@@ -24,23 +24,25 @@ public class QuestionService {
 
     public Page<Question> getList(int page, String kw, String sort) {
         Pageable pageable;
-        if(sort.equals("recommend")){
+
+        if(sort.equals("recommend")){ // 추천순
             pageable = PageRequest.of(page, 10);
             return questionRepository.findAllByVoter(kw, pageable);
         }
-        else if(sort.equals("popular")){
+        else if(sort.equals("popular")){ // 조회순
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "view"));
             return questionRepository.findAllByKeyword(kw, pageable);
         }
-        else if(sort.equals("answer")){
+        else if(sort.equals("answer")){ // 댓글순
             pageable = PageRequest.of(page, 10);
             return questionRepository.findAllByAnswer(kw, pageable);
         }
+        // 최신순
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"createDate"));
         return questionRepository.findAllByKeyword(kw, pageable);
     }
 
-    public Question getQuestion(Integer id) {
+    public Question findQuestion(Integer id) {
         Optional<Question> question = questionRepository.findById(id);
         if (question.isPresent()) {
             return question.get();
@@ -50,18 +52,12 @@ public class QuestionService {
     }
 
     public void create(String subject, String content, CloudUser user) {
-        Question q = new Question();
-        q.setSubject(subject);
-        q.setContent(content);
-        q.setCreateDate(LocalDateTime.now());
-        q.setAuthor(user);
+        Question q = Question.of(subject, content, LocalDateTime.now(), user);
         questionRepository.save(q);
     }
 
     public void modify(Question question, String subject, String content) {
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setCreateDate(LocalDateTime.now());
+        question.modify(subject, content, LocalDateTime.now());
         questionRepository.save(question);
     }
 
@@ -70,12 +66,11 @@ public class QuestionService {
     }
 
     public void vote(Question question, CloudUser user) {
-        QuestionVoterId questionVoterId = new QuestionVoterId(question.getId(), user.getId());
-        QuestionVoter questionVoter = new QuestionVoter();
-        questionVoter.setQuestionVoterId(questionVoterId);
+        QuestionVoterId questionVoterId = QuestionVoterId.of(question.getId(), user.getId());
+        QuestionVoter questionVoter = QuestionVoter.from(questionVoterId);
         questionVoterRepository.save(questionVoter);
 
-        question.getVoter().add(questionVoter);
+        question.addVoter(questionVoter);
         questionRepository.save(question);
     }
 

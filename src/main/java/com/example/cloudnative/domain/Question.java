@@ -12,12 +12,15 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question {
 
     @Id
@@ -44,7 +47,28 @@ public class Question {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
 
-    public int getVoterSize() {
-        return voter.size();
+    private Question(String subject, String content, LocalDateTime createDate, CloudUser author) {
+        this.subject = subject;
+        this.content = content;
+        this.createDate = createDate;
+        this.author = author;
+    }
+
+    public static Question of(String subject, String content, LocalDateTime createDate, CloudUser user){
+        return new Question(subject, content, createDate, user);
+    }
+
+    public void modify(String subject, String content, LocalDateTime createDate) {
+        this.subject = subject;
+        this.content = content;
+        this.createDate = createDate;
+    }
+
+    public boolean isAuthorNameEquals(String userName) {
+        return author.getUsername().equals(userName);
+    }
+
+    public void addVoter(QuestionVoter questionVoter) {
+        voter.add(questionVoter);
     }
 }
