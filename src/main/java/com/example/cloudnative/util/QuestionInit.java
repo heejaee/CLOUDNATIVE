@@ -16,6 +16,7 @@ public class QuestionInit {
 
     @PostConstruct
     public void init(){
+        // 질문 초기값 설정
         for (int i = 1; i <= 300; i++) {
             String subject = String.format("테스트 데이터입니다:[%03d]", i);
             String content = "내용무";
