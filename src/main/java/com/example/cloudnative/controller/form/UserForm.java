@@ -23,4 +23,8 @@ public class UserForm {
     @NotEmpty(message = "이메일은 필수항목입니다.")
     @Email
     private String email;
+
+    public boolean isPasswordEquals(String confirmPassword) {
+        return password.equals(confirmPassword);
+    }
 }

@@ -16,11 +16,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public CloudUser create(String username, String email, String password) {
-        CloudUser user = new CloudUser();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-
+        CloudUser user = CloudUser.of(username, email, passwordEncoder.encode(password));
         userRepository.save(user);
         return user;
     }

@@ -30,8 +30,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-
-        if (!userForm.getPassword().equals(userForm.getConfirmPassword())) {
+        // 비밀번호란과 비밀번호 확인란이 다르면 오류발생
+        if (!userForm.isPasswordEquals(userForm.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
             return "signup_form";
@@ -41,6 +41,7 @@ public class UserController {
             userService.create(userForm.getUsername(),
                     userForm.getEmail(), userForm.getPassword());
         }catch(DataIntegrityViolationException e) {
+            // 이미 등록된 이름이나 이메일이 있으면 오류발생
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup_form";

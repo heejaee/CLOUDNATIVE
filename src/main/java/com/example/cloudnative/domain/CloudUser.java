@@ -28,4 +28,14 @@ public class CloudUser {
 
     @Column(unique = true)
     private String email;
+
+    public CloudUser(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public static CloudUser of(String username, String email, String password) {
+        return new CloudUser(username, email, password);
+    }
 }
