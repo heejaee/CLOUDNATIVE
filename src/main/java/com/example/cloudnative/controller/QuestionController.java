@@ -65,6 +65,7 @@ public class QuestionController {
         if (bindingResult.hasErrors()) {
             return "question_form";
         }
+        // 질문 생성
         CloudUser user = userService.findUser(principal.getName());
         questionService.create(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/list";
@@ -78,7 +79,7 @@ public class QuestionController {
         if(!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-
+        // questionForm 변경
         questionForm.modify(question.getSubject(), question.getContent());
         return "question_form";
     }
@@ -95,7 +96,7 @@ public class QuestionController {
         if (!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-
+        // 질문 변경
         questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
         return String.format("redirect:/question/detail/%s", id);
     }
@@ -107,7 +108,7 @@ public class QuestionController {
         if (!question.isAuthorNameEquals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
-
+        // 질문 삭제
         questionService.delete(question);
         return "redirect:/";
     }
@@ -117,7 +118,7 @@ public class QuestionController {
     public String questionVote(Principal principal, @PathVariable Integer id) {
         Question question = questionService.findQuestion(id);
         CloudUser user = userService.findUser(principal.getName());
-
+        // 질문 추천
         questionService.vote(question, user);
         return String.format("redirect:/question/detail/%s", id);
     }

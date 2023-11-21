@@ -10,4 +10,8 @@ import lombok.Setter;
 public class AnswerForm {
     @NotEmpty(message = "내용은 필수항목입니다.")
     private String content;
+
+    public void modify(String content) {
+        this.content = content;
+    }
 }

@@ -5,8 +5,6 @@ import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.domain.voter.AnswerVoter;
 import com.example.cloudnative.domain.voter.AnswerVoterId;
-import com.example.cloudnative.domain.voter.QuestionVoter;
-import com.example.cloudnative.domain.voter.QuestionVoterId;
 import com.example.cloudnative.repository.AnswerRepository;
 import com.example.cloudnative.repository.AnswerVoterRepository;
 import java.time.LocalDateTime;
@@ -22,16 +20,12 @@ public class AnswerService {
     private final AnswerVoterRepository answerVoterRepository;
 
     public Answer create(Question question, String content, CloudUser author) {
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setCreateDate(LocalDateTime.now());
-        answer.setQuestion(question);
-        answer.setAuthor(author);
+        Answer answer = Answer.of(content, LocalDateTime.now(), question, author);
         answerRepository.save(answer);
         return answer;
     }
 
-    public Answer getAnswer(Integer id) {
+    public Answer findAnswer(Integer id) {
         Optional<Answer> answer = answerRepository.findById(id);
         if (answer.isPresent()) {
             return answer.get();
@@ -41,8 +35,7 @@ public class AnswerService {
     }
 
     public void modify(Answer answer, String content) {
-        answer.setContent(content);
-        answer.setCreateDate(LocalDateTime.now());
+        answer.modify(content, LocalDateTime.now());
         answerRepository.save(answer);
     }
 
@@ -51,12 +44,13 @@ public class AnswerService {
     }
 
     public void vote(Answer answer, CloudUser user) {
-        AnswerVoterId answerVoterId = new AnswerVoterId(answer.getId(), user.getId());
-        AnswerVoter answerVoter = new AnswerVoter();
-        answerVoter.setAnswerVoterId(answerVoterId);
+        // 답변Id와 UserId
+        AnswerVoterId answerVoterId = AnswerVoterId.of(answer.getId(), user.getId());
+        // 답변Id와 UserId를 복합키로 사용
+        AnswerVoter answerVoter = AnswerVoter.from(answerVoterId);
         answerVoterRepository.save(answerVoter);
-
-        answer.getVoter().add(answerVoter);
+        // Set에 저장하여 한 답변에는 한사람당 하나의 추천만 가능합니다.
+        answer.addVoter(answerVoter);
         answerRepository.save(answer);
     }
 }

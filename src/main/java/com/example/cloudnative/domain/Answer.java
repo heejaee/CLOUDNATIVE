@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +39,28 @@ public class Answer {
 
     @OneToMany
     private Set<AnswerVoter> voter;
+
+    private Answer(String content, LocalDateTime createDate, Question question, CloudUser author) {
+        this.content = content;
+        this.createDate = createDate;
+        this.question = question;
+        this.author = author;
+    }
+
+    public static Answer of(String content, LocalDateTime localDateTime, Question question, CloudUser author) {
+        return new Answer(content, localDateTime, question, author);
+    }
+
+    public boolean isAuthorNameEquals(String userName) {
+        return author.getUsername().equals(userName);
+    }
+
+    public void modify(String content, LocalDateTime createDate) {
+        this.content = content;
+        this.createDate =createDate;
+    }
+
+    public void addVoter(AnswerVoter answerVoter) {
+        voter.add(answerVoter);
+    }
 }

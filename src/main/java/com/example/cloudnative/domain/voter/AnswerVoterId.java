@@ -17,8 +17,12 @@ public class AnswerVoterId implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
-    public AnswerVoterId(Long answerId, Long userId) {
+    private AnswerVoterId(Long answerId, Long userId) {
         this.answerId = answerId;
         this.userId = userId;
+    }
+
+    public static AnswerVoterId of(Long answerId, Long userId) {
+        return new AnswerVoterId(answerId, userId);
     }
 }
