@@ -51,9 +51,10 @@ public class QuestionService {
         }
     }
 
-    public void create(String subject, String content, CloudUser user) {
+    public Question create(String subject, String content, CloudUser user) {
         Question q = Question.of(subject, content, LocalDateTime.now(), user);
         questionRepository.save(q);
+        return q;
     }
 
     public void modify(Question question, String subject, String content) {

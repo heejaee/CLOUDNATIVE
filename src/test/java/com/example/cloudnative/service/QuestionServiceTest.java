@@ -1,60 +1,60 @@
 package com.example.cloudnative.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.example.cloudnative.domain.CloudUser;
+import com.example.cloudnative.domain.Question;
 import com.example.cloudnative.repository.QuestionRepository;
-import com.example.cloudnative.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import com.example.cloudnative.repository.QuestionVoterRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("test")
-@SpringBootApplication
+//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@Transactional
+//@Transactional
 class QuestionServiceTest {
 
-    @Autowired
-    QuestionService questionService;
-    @Autowired
-    QuestionRepository questionRepository;
     @Mock
-    UserRepository userRepository;
+    private QuestionRepository questionRepository;
+
     @Mock
-    PasswordEncoder passwordEncoder;
+    private QuestionVoterRepository questionVoterRepository;
+
     @InjectMocks
-    UserService userService;
+    private QuestionService questionService;
 
 
-    @DisplayName("아이디로 이름찾기")
+    @DisplayName("질문 생성하기")
     @Test
-    void findById() {
-        // given
-        //questionRepository.deleteAllInBatch();
-//        userService.create("희재", "hjhj@naver.com", "1234");
-//        BDDMockito.given(userService.create("희재", "hjhj@naver.com", "1234"))
-//                .willReturn(CloudUser.of("희재", "hjhj@naver.com", "1234"));
-//
-////        // when
-////        questionService.create("제목", "내용", user);
-////        // then
-////        assertThat(questionRepository.findById(0).get().getContent()).isEqualTo("내용");
-//        verify(userRepository, times(1)).save(any(CloudUser.class));
+    void create() {
+        String subject = "제목";
+        String content = "내용";
+        String username = "john_doe";
+        CloudUser mockUser = new CloudUser(username, "john@example.com", "encodedPassword123");
+        // mock(CloudUser.class);
+        // new CloudUser(username, "john@example.com", "encodedPassword123");
+
+        Question question = questionService.create(subject, content, mockUser);
+        //BddMockito
+        then(questionRepository).should(atMost(1)).save(question);
+        // Mockito
+        verify(questionRepository, times(1)).save(any(Question.class));
+        verify(questionRepository, times(1)).save(eq(question));
 
     }
+
+
 }

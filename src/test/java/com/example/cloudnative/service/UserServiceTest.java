@@ -1,24 +1,24 @@
 package com.example.cloudnative.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.repository.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +35,6 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    @Rollback(value = false)
     void testCreateUser() {
         // Arrange
         String username = "john_doe";
@@ -64,7 +63,7 @@ class UserServiceTest {
         String username = "john_doe";
         CloudUser mockUser = new CloudUser(username, "john@example.com", "encodedPassword123");
 
-        when(userRepository.findByusername(username)).thenReturn(Optional.of(mockUser));
+        BDDMockito.given(userRepository.findByusername(username)).willReturn(Optional.of(mockUser));
 
         // Act
         CloudUser foundUser = userService.findUser(username);
