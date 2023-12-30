@@ -56,5 +56,35 @@ class QuestionServiceTest {
 
     }
 
+    @DisplayName("질문 수정하기")
+    @Test
+    void modify() {
+        // given
+        String subject = "제목";
+        String content = "내용";
+        String username = "john_doe";
+        CloudUser mockUser = new CloudUser(username, "john@example.com", "encodedPassword123");
+        // mock(CloudUser.class);
+        // new CloudUser(username, "john@example.com", "encodedPassword123");
+
+        Question question = questionService.create(subject, content, mockUser);
+
+        // when
+        questionService.modify(question, subject, content);
+        // then
+        // questionService.create()때 1번 + questionService.modify()때 1번
+        verify(questionRepository, times(2)).save(question);
+    }
+
+    @DisplayName("")
+    @Test
+    void delete() {
+        // given
+
+        // when
+
+        // then
+
+    }
 
 }
