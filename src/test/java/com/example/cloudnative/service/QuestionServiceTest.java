@@ -114,4 +114,17 @@ class QuestionServiceTest {
         verify(questionRepository, times(1)).save(question);
     }
 
+    @DisplayName("질문을 클릭하면 조회수가 증가한다.")
+    @Test
+    void plusView() {
+        // given
+        Question question = mock(Question.class);
+
+        // when
+        questionService.plusView(question);
+
+        // then
+        verify(question, times(1)).plusView(question.getView());
+        verify(questionRepository, atMost(1)).save(question);
+    }
 }
