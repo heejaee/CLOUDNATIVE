@@ -1,6 +1,10 @@
 package com.example.cloudnative.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atMost;
@@ -15,6 +19,8 @@ import com.example.cloudnative.domain.voter.QuestionVoter;
 import com.example.cloudnative.repository.QuestionRepository;
 import com.example.cloudnative.repository.QuestionVoterRepository;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -126,5 +132,39 @@ class QuestionServiceTest {
         // then
         verify(question, times(1)).plusView(question.getView());
         verify(questionRepository, atMost(1)).save(question);
+    }
+
+    @DisplayName("저장된 질문 찾기")
+    @Test
+    void findQuestion() {
+        // given
+        Integer id = 1;
+        Question mockQuestion = mock(Question.class);
+        Optional<Question> question = Optional.of(mockQuestion);
+
+        when(questionRepository.findById(anyInt())).thenReturn(question);
+
+        // when
+        Question foundQuestion = questionService.findQuestion(id);
+
+        // then
+        assertThat(foundQuestion).isEqualTo(mockQuestion);
+        verify(questionRepository, times(1)).findById(id);
+    }
+
+    @DisplayName("없는 질문 찾기")
+    @Test
+    void findNoneQuestion() {
+        // given
+        Question mockQuestion = mock(Question.class);
+        Optional<Question> question = Optional.of(mockQuestion);
+
+        // when
+        when(questionRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> questionService.findQuestion(1))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("question not found");
     }
 }
