@@ -6,10 +6,12 @@ import com.example.cloudnative.service.QuestionService;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("local")
 public class QuestionInit {
 
     private final QuestionService questionService;

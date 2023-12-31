@@ -4,6 +4,7 @@ import com.example.cloudnative.controller.form.AnswerForm;
 import com.example.cloudnative.controller.form.QuestionForm;
 import com.example.cloudnative.domain.CloudUser;
 import com.example.cloudnative.domain.Question;
+import com.example.cloudnative.domain.voter.QuestionVoter;
 import com.example.cloudnative.service.QuestionService;
 import com.example.cloudnative.service.UserService;
 import jakarta.validation.Valid;
@@ -119,7 +120,8 @@ public class QuestionController {
         Question question = questionService.findQuestion(id);
         CloudUser user = userService.findUser(principal.getName());
         // 질문 추천
-        questionService.vote(question, user);
+        QuestionVoter questionVoter = questionService.createQuestionVoter(question, user);
+        questionService.vote(question, questionVoter);
         return String.format("redirect:/question/detail/%s", id);
     }
 }

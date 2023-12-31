@@ -66,15 +66,19 @@ public class QuestionService {
        questionRepository.delete(question);
     }
 
-    public void vote(Question question, CloudUser user) {
+    public void vote(Question question, QuestionVoter questionVoter) {
+        // Set에 저장하여 한 질문에는 한사람당 하나의 추천만 가능합니다.
+        question.addVoter(questionVoter);
+        questionRepository.save(question);
+    }
+
+    public QuestionVoter createQuestionVoter(Question question, CloudUser user) {
         // 질문Id와 UserId
         QuestionVoterId questionVoterId = QuestionVoterId.of(question.getId(), user.getId());
         // 질문Id와 UserId를 복합키로 사용
         QuestionVoter questionVoter = QuestionVoter.from(questionVoterId);
         questionVoterRepository.save(questionVoter);
-        // Set에 저장하여 한 질문에는 한사람당 하나의 추천만 가능합니다.
-        question.addVoter(questionVoter);
-        questionRepository.save(question);
+        return questionVoter;
     }
 
     public void plusView(Question question) {
